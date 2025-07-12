@@ -10,14 +10,21 @@ class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, info) {
-    // Log error to an error reporting service
-    console.error(error, info);
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      return <div data-testid="error-boundary">Something went wrong.</div>;
+      return (
+        <div role="alert" style={{ padding: '1rem', backgroundColor: '#fdd', color: '#900' }}>
+          <h2>Something went wrong.</h2>
+          <pre>{this.state.error?.toString()}</pre>
+          <button onClick={() => this.setState({ hasError: false, error: null })}>
+            Try Again
+          </button>
+        </div>
+      );
     }
     return this.props.children;
   }
